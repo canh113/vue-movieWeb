@@ -2,21 +2,37 @@
   <div>
     <div class="mb-3">
       <label class="form-label">Name</label>
-      <input type="text" class="form-control" v-model="name" />
+      <input
+        type="text"
+        class="form-control"
+        placeholder="Name"
+        v-model="name"
+      />
       <div v-if="checkInput" class="text-danger">
         <p>please input data</p>
       </div>
     </div>
     <div class="mb-3">
       <label class="form-label">Genre</label>
-      <input type="text" class="form-control" v-model="genre" />
+      <!-- <input type="text" class="form-control" v-model="genre" /> -->
+      <select class="custom-select form-control" v-model="genre">
+        <option value="null" selected>Open this select genre</option>
+        <option v-for="item in GenreData" :key="item.Id" :value="item.Name">
+          {{ item.Name }}
+        </option>
+      </select>
       <div v-if="checkInput" class="text-danger">
         <p>please input data</p>
       </div>
     </div>
     <div class="mb-3">
       <label class="form-label">Time</label>
-      <input type="text" class="form-control" v-model="duration" />
+      <input
+        type="text"
+        class="form-control"
+        placeholder="Time"
+        v-model="duration"
+      />
       <div v-if="checkInput" class="text-danger">
         <p>please input data</p>
       </div>
@@ -33,15 +49,21 @@ export default {
       name: null,
       genre: null,
       duration: null,
+      GenreData: {
+        1: { Name: "Action/Comedy" },
+        2: { Name: "Action/Thriller" },
+        3: { Name: "Sci-fi/Drama" },
+        4: { Name: "Animation/Family" },
+      },
     };
   },
 
   methods: {
     async SubmitData() {
       this.CheckDataInput();
-      //   if (!this.CheckDataInput()) {
-      //     return;
-      //   }
+      if (this.checkInput == true) {
+        return;
+      }
       let res = await this.$http.post(
         "/movies",
         {
@@ -55,8 +77,8 @@ export default {
           },
         }
       );
-      console.log("----------data check-----------");
-      console.log(res);
+      //console.log("----------data check-----------");
+      //console.log(res);
       if (res && res.status == 200) {
         this.$emit("reload");
         alert("Your request sent successfully!");
@@ -69,6 +91,7 @@ export default {
     CheckDataInput() {
       if (this.name == null && this.genre == null && this.duration == null) {
         this.checkInput = true;
+        return;
       } else {
         this.checkInput = false;
       }

@@ -2,6 +2,8 @@
   <div>
     <h1 class="text-center">welcome Movie Web</h1>
     <div class="container">
+      <!-- <router-link to="/form">Form</router-link>
+      <router-link to="/list">List</router-link> -->
       <nav>
         <div class="nav nav-tabs" id="nav-tab" role="tablist">
           <button
