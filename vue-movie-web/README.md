@@ -1,4 +1,4 @@
-# vue-movie-web
+# vue-mrr
 
 ## Project setup
 ```

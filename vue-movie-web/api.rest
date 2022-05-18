@@ -1,0 +1,7 @@
+###
+POST https://spp-api.scancom.net/McrRequest 
+content-type: "application/json; charset=utf-8"
+Authorization: 
+{
+
+}

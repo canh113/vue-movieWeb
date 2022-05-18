@@ -1,15 +1,34 @@
 <template>
-  <div>
-    <Home></Home>
-  </div>
+  <router-view></router-view>
 </template>
 
 <script>
-import Home from "./components/Home.vue";
 export default {
   name: "App",
-  components: {
-    Home,
+  created: function () {
+    this.$http.interceptors.response.use(undefined, (err) => {
+      return new Promise(() => {
+        if (err.toString().includes("403") || err.toString().includes("401")) {
+          if (!this.wasConfirm) {
+            this.wasConfirm = true;
+            if (
+              confirm(
+                `${this.$const.MESSAGE.NotAuthorization} ${this.$const.MESSAGE.WannaLogout}`
+              )
+            ) {
+              this.$user.dispatch("logout").then(() => {
+                let returnUrl = window.location.href;
+                console.log("window.location.href");
+                console.log(window.location.href);
+                window.location = `https://spp.scancom.net/login?returnUrl=${returnUrl}`;
+              });
+              return;
+            }
+          }
+        }
+        throw err;
+      });
+    });
   },
 };
 </script>
@@ -21,6 +40,6 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-  margin-top: 60px;
+  margin-top: 40px;
 }
 </style>
