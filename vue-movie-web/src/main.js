@@ -19,7 +19,7 @@ Vue.use(BootstrapVue);
 import Axios from "axios";
 Vue.prototype.$http = Axios.create({
   // baseURL: "https://localhost:5001",
-  baseURL: "https://spp-api.scancom.net",
+  baseURL: "https://localhost:44373/api/",
   timeout: 120000,
 });
 

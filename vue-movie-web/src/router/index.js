@@ -2,9 +2,9 @@ import Vue from "vue";
 import Router from "vue-router";
 import user from "@/store/user.js";
 
-const HomePage = () => import("@/views/home/Index.vue");
+const LoginPage = () => import("@/views/home/Login.vue");
 
-const TestPage = () => import("@/views/home/Test.vue");
+const HomePage = () => import("@/views/home/Index.vue");
 
 Vue.use(Router);
 
@@ -16,16 +16,16 @@ const router = new Router({
   routes: [
     {
       path: "/",
-      name: "HomePage",
-      component: HomePage,
+      name: "LoginPage",
+      component: LoginPage,
       meta: {
         requiresAuth: true,
       },
     },
     {
-      path: "/Test",
-      name: "Test",
-      component: TestPage,
+      path: "/HomePage",
+      name: "HomePage",
+      component: HomePage,
     },
   ],
 });

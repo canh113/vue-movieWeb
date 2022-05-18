@@ -52,7 +52,6 @@
       </div>
       <br />
     </div>
-    <button @click="routerTest()">click</button>
   </div>
 </template>
 <script>
@@ -68,10 +67,6 @@ export default {
       loadList: false,
     };
   },
-  methods: {
-    routerTest() {
-      this.$router.push({ name: "Test" });
-    },
-  },
+  methods: {},
 };
 </script>
