@@ -14,7 +14,8 @@
       <tbody>
         <tr v-for="(item, index) in requestlist" :key="item.Id">
           <th scope="row">{{ index + 1 }}</th>
-          <td class="pointer" @click="getDataById(item)">{{ item.name }}</td>
+          <!-- <td class="pointer" @click="getDataById(item)">{{ item.name }}</td> -->
+          <td class="pointer" @click="getDataRouter(item)">{{ item.name }}</td>
           <td>{{ item.genre }}</td>
           <td>{{ item.duration }}</td>
           <td>{{ $moment(item.releaseDate).format("DD/MM/yyyy") }}</td>
@@ -24,7 +25,7 @@
         </tr>
       </tbody>
     </table>
-    <div v-if="isEdit">
+    <div v-if="requestId">
       <h4>Change data list</h4>
       <div class="mb-3">
         <label class="form-label">Name</label>
@@ -44,7 +45,8 @@
         <label class="form-label">Duration</label>
         <input type="text" class="form-control" v-model="duration" />
       </div>
-      <button @click="saveData()" class="btn btn-primary">Submit</button>
+      <button @click="saveData()" class="btn btn-primary mx-1">Submit</button>
+      <button @click="closeForm()" class="btn btn-danger">Close</button>
     </div>
   </div>
 </template>
@@ -70,8 +72,19 @@ export default {
       },
     };
   },
-  mounted() {
-    this.getRequest();
+  async mounted() {
+    if (this.requestId) {
+      console.log("da vao 111");
+      await this.getRequest();
+      this.showDataDetil(this.requestId);
+    } else {
+      await this.getRequest();
+    }
+  },
+  computed: {
+    requestId() {
+      return this.$route.query.requestId;
+    },
   },
   watch: {
     loadList() {
@@ -81,6 +94,13 @@ export default {
     loadListMovie() {
       this.getRequest();
     },
+    requestId(val) {
+      if (val) {
+        console.log("!!!!!!Check data");
+        console.log(val);
+        this.showDataDetil(val);
+      }
+    },
   },
   methods: {
     async getRequest() {
@@ -89,13 +109,37 @@ export default {
     },
 
     async getDataById(e) {
-      this.isEdit = true;
+      //this.isEdit = true;
+      console.log("data get by id");
+      console.log(e);
       let requestInfo = e;
       this.requestInfo = requestInfo;
       this.name = e.name;
       this.genre = e.genre;
       this.duration = e.duration;
     },
+
+    getDataRouter(item) {
+      //console.log(item);
+      let requestId = item.id;
+      this.$router
+        .push({ name: "HomePage", query: { requestId } })
+        .catch(() => {});
+    },
+
+    async showDataDetil(val) {
+      console.log("data check showDataDetil");
+      console.log(val);
+      let data = await this.requestlist.find((_) => _.id == val);
+      if (data) {
+        this.$emit("active");
+        this.getDataById(data);
+      }
+      //console.log(data);
+      //this.$emit("active");
+      //this.getDataById(data);
+    },
+
     async saveData() {
       //put
       let data = await this.$http.put(
@@ -152,6 +196,11 @@ export default {
       } else {
         alert("Your request delete fail!");
       }
+    },
+    closeForm() {
+      //this.isEdit = false;
+
+      this.$router.push({ name: "HomePage", query: {} }).catch(() => {});
     },
   },
 };
